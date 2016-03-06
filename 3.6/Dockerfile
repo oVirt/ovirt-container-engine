@@ -29,6 +29,9 @@ RUN yum -y localinstall http://resources.ovirt.org/pub/yum-repo/ovirt-release36.
 # engine-setup needs the link to initctl
 RUN ln -s /usr/sbin/service /usr/bin/initctl
 
+#oVirt
+ENV OVIRT_PASSWORD engine
+
 COPY entrypoint.sh answers.conf setup.patch /
 COPY 999-ovirt-engine.conf /etc/ovirt-engine/engine.conf.d/
 
