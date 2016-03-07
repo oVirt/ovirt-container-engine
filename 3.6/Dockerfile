@@ -32,7 +32,7 @@ RUN ln -s /usr/sbin/service /usr/bin/initctl
 #oVirt
 ENV OVIRT_PASSWORD engine
 
-COPY entrypoint.sh answers.conf setup.patch /
+COPY entrypoint.sh answers.conf.in setup.patch /
 COPY 999-ovirt-engine.conf /etc/ovirt-engine/engine.conf.d/
 
 # patch engine-setup so that it does not try to start or stop services with systemd

@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 
+cp -f answers.conf.in answers.conf
 echo OVESETUP_DB/user=str:$POSTGRES_USER >> answers.conf
 echo OVESETUP_DB/password=str:$POSTGRES_PASSWORD >> answers.conf
 echo OVESETUP_DB/database=str:$POSTGRES_DB >> answers.conf
