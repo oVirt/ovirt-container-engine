@@ -33,4 +33,5 @@ ENV POSTGRES_PORT 5432       # Postgres port
 ```
 ENV OVIRT_FQDN localhost    # Full qualified domain name of the engine
 ENV OVIRT_PASSWORD engine   # Admin password of the engine
+ENV OVIRT_PKI_ORGANIZATION  # PKI organization name
 ```

@@ -31,6 +31,7 @@ RUN ln -s /usr/sbin/service /usr/bin/initctl
 
 #oVirt
 ENV OVIRT_PASSWORD engine
+ENV OVIRT_PKI_ORGANIZATION oVirt
 
 COPY entrypoint.sh answers.conf.in setup.patch /
 COPY 999-ovirt-engine.conf /etc/ovirt-engine/engine.conf.d/
