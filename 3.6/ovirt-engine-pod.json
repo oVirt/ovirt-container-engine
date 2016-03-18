@@ -2,13 +2,18 @@
   "kind": "Pod",
   "apiVersion": "v1",
   "metadata": {
-    "name": "ovirt-engine"
+    "name": "ovirt-engine",
+    "labels":
+      {
+        "app": "ovirt-engine"
+      }
   },
   "spec": {
     "containers": [
       {
         "name": "ovirt-engine",
-        "image": "rmohr/ovirt-engine",
+        "image": "rmohr/ovirt-engine:3.6",
+        "imagePullPolicy": "Always",
         "ports": [
           {
             "containerPort": 8080,
@@ -66,7 +71,8 @@
       },
       {
         "name": "postgres",
-        "image": "rmohr/ovirt-postgres",
+        "image": "rmohr/ovirt-postgres:9.2.15",
+        "imagePullPolicy": "Always",
         "ports": [
           {
             "containerPort": 5432,
