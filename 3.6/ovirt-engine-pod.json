@@ -1,0 +1,123 @@
+{
+  "kind": "Pod",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "ovirt-engine"
+  },
+  "spec": {
+    "containers": [
+      {
+        "name": "ovirt-engine",
+        "image": "rmohr/ovirt-engine",
+        "ports": [
+          {
+            "containerPort": 8080,
+            "name": "engine"
+          },
+          {
+            "containerPort": 8443,
+            "name": "engine-tls"
+          }
+        ],
+        "volumes": [
+          {
+            "name": "certs",
+            "mountPath": "/etc/pki/ovirt-engine"
+          },
+          {
+            "name": "backups",
+            "mountPath": "/var/lib/ovirt-engine/backups"
+          }
+        ],
+        "env": [
+          {
+            "name": "POSTGRES_USER",
+            "value": "engine"
+          },
+          {
+            "name": "POSTGRES_PASSWORD",
+            "value": "engine"
+          },
+          {
+            "name": "POSTGRES_DB",
+            "value": "engine"
+          },
+          {
+            "name": "POSTGRES_HOST",
+            "value": "localhost"
+          },
+          {
+            "name": "POSTGRES_PORT",
+            "value": "5432"
+          },
+          {
+            "name": "OVIRT_FQDN",
+            "value": "localhost"
+          },
+          {
+            "name": "OVIRT_PASSWORD",
+            "value": "engine"
+          },
+          {
+            "name": "OVIRT_PKI_ORGANIZATION",
+            "value": "oVirt"
+          }
+        ]
+      },
+      {
+        "name": "postgres",
+        "image": "rmohr/ovirt-postgres",
+        "ports": [
+          {
+            "containerPort": 5432,
+            "name": "ovirt-postgres"
+          }
+        ],
+        "volumes": [
+          {
+            "name": "pgdata",
+            "mountPath": "/var/lib/postgresql/data"
+          }
+        ],
+        "env": [
+          {
+            "name": "POSTGRES_USER",
+            "value": "engine"
+          },
+          {
+            "name": "POSTGRES_PASSWORD",
+            "value": "engine"
+          },
+          {
+            "name": "POSTGRES_DB",
+            "value": "engine"
+          }
+        ]
+      },
+      {
+        "name": "kubectl",
+        "image": "gcr.io/google_containers/kubectl:v0.18.0-120-gaeb4ac55ad12b1-dirty",
+        "imagePullPolicy": "Always",
+        "args": [
+          "proxy",
+          "-p",
+          "8001"
+        ]
+      }
+    ],
+    "volumes": [
+      {
+        "name": "certs",
+        "emptyDir": {}
+      },
+      {
+        "name": "backups",
+        "emptyDir": {}
+      },
+      {
+        "name": "pgdata",
+        "emptyDir": {}
+      }
+    ]
+  }
+}
