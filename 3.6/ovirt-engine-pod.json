@@ -32,7 +32,12 @@
           {
             "name": "backups",
             "mountPath": "/var/lib/ovirt-engine/backups"
+          },
+          {
+            "name": "plugins",
+            "mountPath": "/usr/share/ovirt-engine/ui-plugins/"
           }
+
         ],
         "env": [
           {
@@ -122,6 +127,10 @@
       },
       {
         "name": "pgdata",
+        "emptyDir": {}
+      },
+      {
+        "name": "plugins",
         "emptyDir": {}
       }
     ]
