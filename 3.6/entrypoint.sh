@@ -13,4 +13,4 @@ echo OVESETUP_CONFIG/adminPassword=str:$OVIRT_PASSWORD >> answers.conf
 echo OVESETUP_PKI/organization=str:$OVIRT_PKI_ORGANIZATION >> answers.conf
 
 
-engine-setup --config=answers.conf && su -m -s /bin/python ovirt /usr/share/ovirt-engine/services/ovirt-engine/ovirt-engine.py start
+engine-setup --config=answers.conf --offline && su -m -s /bin/python ovirt /usr/share/ovirt-engine/services/ovirt-engine/ovirt-engine.py start
