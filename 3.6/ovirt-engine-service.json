@@ -10,15 +10,20 @@
     },
     "ports": [
       {
+        "name": "engine",
         "protocol": "TCP",
         "port": 80,
         "targetPort": "engine"
       },
       {
+        "name": "engine-tls",
         "protocol": "TCP",
         "port": 443,
         "targetPort": "engine-tls"
       }
+    ],
+    "externalIPs": [
+      "YOUR_IP_HERE"
     ]
   }
 }

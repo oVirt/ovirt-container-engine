@@ -3,10 +3,9 @@
   "apiVersion": "v1",
   "metadata": {
     "name": "ovirt-engine",
-    "labels":
-      {
-        "app": "ovirt-engine"
-      }
+    "labels": {
+      "app": "ovirt-engine"
+    }
   },
   "spec": {
     "containers": [
@@ -24,7 +23,7 @@
             "name": "engine-tls"
           }
         ],
-        "volumes": [
+        "volumeMounts": [
           {
             "name": "certs",
             "mountPath": "/etc/pki/ovirt-engine"
@@ -37,7 +36,6 @@
             "name": "plugins",
             "mountPath": "/usr/share/ovirt-engine/ui-plugins/"
           }
-
         ],
         "env": [
           {
@@ -84,7 +82,7 @@
             "name": "ovirt-postgres"
           }
         ],
-        "volumes": [
+        "volumeMounts": [
           {
             "name": "pgdata",
             "mountPath": "/var/lib/postgresql/data"
