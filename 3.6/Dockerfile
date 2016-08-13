@@ -39,6 +39,9 @@ COPY 999-ovirt-engine.conf /etc/ovirt-engine/engine.conf.d/
 # patch engine-setup so that it does not try to start or stop services with systemd
 RUN patch -p0 < setup.patch
 
+# For kubernetes copy pki template files to a backup directory
+RUN cp -a /etc/pki/ovirt-engine /etc/pki/ovirt-engine.tmpl
+
 # Persist this folder to keep the generated TLS certificates on the first start
 VOLUME /etc/pki/ovirt-engine
 # Persist this folder to keep the database backups
