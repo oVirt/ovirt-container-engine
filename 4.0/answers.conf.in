@@ -43,3 +43,6 @@ OVESETUP_CONFIG/fenceKdumpListenerStopNeeded=bool:False
 OVESETUP_APACHE/enable=bool:False
 OVESETUP_CONFIG/engineServiceStopNeeded=bool:False
 OVESETUP_ASYNC/clearTasks=bool:False
+OVESETUP_DWH_CORE/enable=bool:False
+OVESETUP_DWH_PROVISIONING/postgresProvisioningEnabled=bool:False
+OVESETUP_CONFIG/imageioProxyConfig=bool:False
