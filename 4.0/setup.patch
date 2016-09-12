@@ -1,0 +1,105 @@
+diff -Naur /usr/share/ovirt-engine-orig/services/ovirt-engine/ovirt-engine.xml.in /usr/share/ovirt-engine/services/ovirt-engine/ovirt-engine.xml.in
+--- /usr/share/ovirt-engine-orig/services/ovirt-engine/ovirt-engine.xml.in  2016-02-29 23:07:12.000000000 +0000
++++ /usr/share/ovirt-engine/services/ovirt-engine/ovirt-engine.xml.in   2016-03-05 05:36:58.991177449 +0000
+@@ -162,18 +162,14 @@
+       <logger category="org.ovirt" use-parent-handlers="false">
+         <level name="INFO"/>
+         <handlers>
+-          <handler name="ENGINE"/>
+-          <handler name="ovirt-logger"/>
+-          {% if config.getboolean('ENGINE_LOG_TO_CONSOLE') %}
+           <handler name="CONSOLE"/>
+-          {% endif %}
+         </handlers>
+       </logger>
+       <!-- Loggers for the UI -->
+       <logger category="org.ovirt.engine.ui.frontend.server.gwt.OvirtRemoteLoggingService" use-parent-handlers="false">
+         <level name="INFO"/>
+         <handlers>
+-          <handler name="UI"/>
++          <handler name="CONSOLE"/>
+         </handlers>
+       </logger>
+        <logger category="org.ovirt.engine.core.bll">
+@@ -186,8 +182,7 @@
+       <root-logger>
+         <level name="INFO"/>
+         <handlers>
+-          <handler name="ovirt-logger"/>
+-          <handler name="SERVER"/>
++          <handler name="CONSOLE"/>
+         </handlers>
+       </root-logger>
+     </subsystem>
+diff -Naur /usr/share/ovirt-engine/setup_backup/plugins/ovirt-engine-common/ovirt-engine-common/system/apache.py /usr/share/ovirt-engine/setup/plugins/ovirt-engine-common/ovirt-engine-common/system/apache.py
+--- /usr/share/ovirt-engine/setup_backup/plugins/ovirt-engine-common/ovirt-engine-common/system/apache.py   2016-02-29 23:07:13.000000000 +0000
++++ /usr/share/ovirt-engine/setup/plugins/ovirt-engine-common/ovirt-engine-common/system/apache.py  2016-03-04 10:45:25.198285051 +0000
+@@ -70,7 +70,7 @@
+             self._enabled and
+             self.environment[
+                 oengcommcons.ApacheEnv.NEED_RESTART
+-            ]
++            ] and False
+         ),
+     )
+     def _closeup(self):
+diff -Naur /usr/share/ovirt-engine/setup_backup/plugins/ovirt-engine-rename/ovirt-engine/engine.py /usr/share/ovirt-engine/setup/plugins/ovirt-engine-rename/ovirt-engine/engine.py
+--- /usr/share/ovirt-engine/setup_backup/plugins/ovirt-engine-rename/ovirt-engine/engine.py 2016-02-29 23:07:13.000000000 +0000
++++ /usr/share/ovirt-engine/setup/plugins/ovirt-engine-rename/ovirt-engine/engine.py    2016-03-04 10:45:49.672298016 +0000
+@@ -45,7 +45,7 @@
+         name=oengcommcons.Stages.CORE_ENGINE_START,
+         condition=lambda self: not self.environment[
+             osetupcons.CoreEnv.DEVELOPER_MODE
+-        ],
++        ] and False,
+     )
+     def _closeup(self):
+         self.logger.info(_('Starting engine service'))
+diff -Naur /usr/share/ovirt-engine/setup_backup/plugins/ovirt-engine-setup/ovirt-engine/fence_kdump_listener/config.py /usr/share/ovirt-engine/setup/plugins/ovirt-engine-setup/ovirt-engine/fence_kdump_listener/config.py
+--- /usr/share/ovirt-engine/setup_backup/plugins/ovirt-engine-setup/ovirt-engine/fence_kdump_listener/config.py 2016-02-29 23:07:12.000000000 +0000
++++ /usr/share/ovirt-engine/setup/plugins/ovirt-engine-setup/ovirt-engine/fence_kdump_listener/config.py    2016-03-04 10:46:26.547317550 +0000
+@@ -89,7 +89,7 @@
+             not self.environment[
+                 osetupcons.CoreEnv.DEVELOPER_MODE
+             ] and
+-            self._enabled
++            self._enabled and False
+         ),
+     )
+     def _closeup(self):
+diff -Naur /usr/share/ovirt-engine/setup_backup/plugins/ovirt-engine-setup/ovirt-engine/system/engine.py /usr/share/ovirt-engine/setup/plugins/ovirt-engine-setup/ovirt-engine/system/engine.py
+--- /usr/share/ovirt-engine/setup_backup/plugins/ovirt-engine-setup/ovirt-engine/system/engine.py   2016-02-29 23:07:13.000000000 +0000
++++ /usr/share/ovirt-engine/setup/plugins/ovirt-engine-setup/ovirt-engine/system/engine.py  2016-03-04 10:48:23.823379673 +0000
+@@ -46,7 +46,7 @@
+             self.environment[oenginecons.CoreEnv.ENABLE] and
+             not self.environment[
+                 osetupcons.CoreEnv.DEVELOPER_MODE
+-            ]
++            ] and False
+         ),
+     )
+     def _closeup(self):
+diff -Naur /usr/share/ovirt-engine/setup_backup/plugins/ovirt-engine-setup/vmconsole_proxy_helper/system.py /usr/share/ovirt-engine/setup/plugins/ovirt-engine-setup/vmconsole_proxy_helper/system.py
+--- /usr/share/ovirt-engine/setup_backup/plugins/ovirt-engine-setup/vmconsole_proxy_helper/system.py    2016-02-29 23:07:12.000000000 +0000
++++ /usr/share/ovirt-engine/setup/plugins/ovirt-engine-setup/vmconsole_proxy_helper/system.py   2016-03-04 11:00:24.780761585 +0000
+@@ -80,7 +80,7 @@
+                 osetupcons.CoreEnv.DEVELOPER_MODE
+             ] and self.environment[
+                 ovmpcons.ConfigEnv.VMCONSOLE_PROXY_CONFIG
+-            ]
++            ] and False
+         ),
+     )
+     def _closeup(self):
+diff -Nuar /usr/share/ovirt-engine/setup_backup/plugins/ovirt-engine-setup/websocket_proxy/config.py /usr/share/ovirt-engine/setup/plugins/ovirt-engine-setup/websocket_proxy/config.py
+--- /usr/share/ovirt-engine/setup_backup/plugins/ovirt-engine-setup/websocket_proxy/config.py   2016-02-29 23:07:12.000000000 +0000
++++ /usr/share/ovirt-engine/setup/plugins/ovirt-engine-setup/websocket_proxy/config.py  2016-03-04 11:06:01.215939805 +0000
+@@ -271,7 +271,7 @@
+             ] and (
+                 self._needStart or
+                 self._enabled
+-            )
++            ) and False
+         ),
+     )
+     def _closeup(self):
