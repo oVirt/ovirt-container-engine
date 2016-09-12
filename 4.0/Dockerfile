@@ -47,5 +47,9 @@ VOLUME /etc/pki/ovirt-engine
 # Persist this folder to keep the database backups
 VOLUME /var/lib/ovirt-engine/backups
 
-CMD bash /entrypoint.sh
+# Encrypt host communication
+ENV HOST_ENCRYPT=true
+# Try to provision hosts when they are added
+ENV HOST_INSTALL=true
 
+CMD bash /entrypoint.sh
