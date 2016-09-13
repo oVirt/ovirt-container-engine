@@ -29,5 +29,6 @@ script:
   - docker-compose ps
   - docker-compose ps | grep Up
   - docker-compose ps | grep "8443/tcp"
-  - docker-compose ps | grep "8787/tcp"
-  - wget --retry-connrefused --waitretry=15 --read-timeout=20 --timeout=15 -t 30 -O /dev/null --user admin@internal --password engine http://localhost:8787/ovirt-engine/services/health
+  - docker-compose ps | grep "8080/tcp"
+  - wget --retry-connrefused --waitretry=15 --read-timeout=20 --timeout=15 -t 20 -O /dev/null http://localhost:8080/ovirt-engine/services/health
+  - wget --no-check-certificate --retry-connrefused --waitretry=5 --read-timeout=20 --timeout=15 -t 5 -O /dev/null https://localhost:8443/ovirt-engine/services/health

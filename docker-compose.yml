@@ -10,7 +10,7 @@ ovirt-engine:
     - postgres
   ports:
     - 8443:8443
-    - 8787:8787
+    - 8080:8080
 
 postgres:
   image: rmohr/ovirt-postgres
