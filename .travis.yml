@@ -4,6 +4,9 @@ services:
   - docker
 
 env:
+  global:
+    - DOCKER_VERSION=1.12.0-0~trusty
+    - DOCKER_COMPOSE_VERSION=1.8.0
   matrix:
     - MAJOR_VERSION=4.0
     - MAJOR_VERSION=3.6
