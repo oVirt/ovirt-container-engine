@@ -1,0 +1,30 @@
+sudo: required
+
+services:
+  - docker
+
+env:
+  matrix:
+    - MAJOR_VERSION=4.0
+    - MAJOR_VERSION=3.6
+
+before_install:
+  # upgrade docker
+  - sudo apt-get -o Dpkg::Options::="--force-confnew" install -y docker-engine=${DOCKER_VERSION} wget
+  - docker version
+  # upgrade docker-compose
+  - sudo rm -rf /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+  - docker-compose version
+
+
+script:
+  - docker-compose build
+  - docker-compose up -d
+  - docker-compose ps
+  - docker-compose ps | grep Up
+  - docker-compose ps | grep "8443/tcp"
+  - docker-compose ps | grep "8787/tcp"
+  - wget --retry-connrefused --waitretry=5 --read-timeout=20 --timeout=15 -t 10 -O /dev/null --user admin@internal --password engine http://localhost:8787/ovirt-engine/services/health
