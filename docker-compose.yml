@@ -18,5 +18,3 @@ postgres:
     - POSTGRES_PASSWORD=engine
     - POSTGRES_USER=engine
     - POSTGRES_DB=engine
-  ports:
-    - 5432:5432
