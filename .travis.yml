@@ -30,4 +30,4 @@ script:
   - docker-compose ps | grep Up
   - docker-compose ps | grep "8443/tcp"
   - docker-compose ps | grep "8787/tcp"
-  - wget --retry-connrefused --waitretry=5 --read-timeout=20 --timeout=15 -t 30 -O /dev/null --user admin@internal --password engine http://localhost:8787/ovirt-engine/services/health
+  - wget --retry-connrefused --waitretry=15 --read-timeout=20 --timeout=15 -t 30 -O /dev/null --user admin@internal --password engine http://localhost:8787/ovirt-engine/services/health
