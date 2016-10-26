@@ -69,6 +69,10 @@
           {
             "name": "OVIRT_PKI_ORGANIZATION",
             "value": "oVirt"
+          },
+          {
+            "name": "SPICE_PROXY",
+            "value": "http://YOUR_IP_HERE:3128"
           }
         ]
       },
@@ -104,13 +108,14 @@
         ]
       },
       {
-        "name": "kubectl",
-        "image": "gcr.io/google_containers/kubectl:v0.18.0-120-gaeb4ac55ad12b1-dirty",
+        "name": "spice-proxy",
+        "image": "rmohr/spice-squid",
         "imagePullPolicy": "Always",
-        "args": [
-          "proxy",
-          "-p",
-          "8001"
+        "ports": [
+          {
+            "containerPort": 3128,
+            "name": "spice-proxy"
+          }
         ]
       }
     ],

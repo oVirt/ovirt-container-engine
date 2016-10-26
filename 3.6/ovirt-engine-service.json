@@ -20,6 +20,12 @@
         "protocol": "TCP",
         "port": 443,
         "targetPort": "engine-tls"
+      },
+      {
+        "name": "spice-proxy",
+        "protocol": "TCP",
+        "port": 3128,
+        "targetPort": "spice-proxy"
       }
     ],
     "externalIPs": [
