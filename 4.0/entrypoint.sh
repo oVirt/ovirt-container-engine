@@ -18,6 +18,10 @@ cp -a /etc/pki/ovirt-engine.tmpl/* /etc/pki/ovirt-engine/
 
 engine-setup --config=answers.conf --offline
 
+if [ -n "$SPICE_PROXY" ]; then
+  engine-config -s SpiceProxyDefault=$SPICE_PROXY
+fi
+
 export PGPASSWORD=$POSTGRES_PASSWORD
 psql $POSTGRES_DB -h $POSTGRES_HOST -p $POSTGRES_PORT  -U $POSTGRES_USER -c "UPDATE vdc_options set option_value = '$HOST_ENCRYPT' WHERE option_name = 'SSLEnabled';"
 psql $POSTGRES_DB -h $POSTGRES_HOST -p $POSTGRES_PORT  -U $POSTGRES_USER -c "UPDATE vdc_options set option_value = '$HOST_ENCRYPT' WHERE option_name = 'EncryptHostCommunication';"
