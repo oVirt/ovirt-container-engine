@@ -21,7 +21,9 @@ before_install:
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
   - docker-compose version
-
+  - export DOCKERIZE_VERSION=v0.2.0
+  - wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+  - tar -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
 script:
   - docker-compose build
@@ -30,5 +32,6 @@ script:
   - docker-compose ps | grep Up
   - docker-compose ps | grep "8443/tcp"
   - docker-compose ps | grep "8080/tcp"
-  - wget --retry-connrefused --waitretry=15 --read-timeout=20 --timeout=15 -t 20 -O - http://localhost:8080/ovirt-engine/services/health
-  - wget --no-check-certificate --retry-connrefused --waitretry=5 --read-timeout=20 --timeout=15 -t 5 -O - https://localhost:8443/ovirt-engine/services/health
+  - ./dockerize -wait http://localhost:8080/ovirt-engine/services/health -timeout 10m
+  - wget -O - http://localhost:8080/ovirt-engine/services/health
+  - wget --no-check-certificate -O - https://localhost:8443/ovirt-engine/services/health
