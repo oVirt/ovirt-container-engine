@@ -1,0 +1,20 @@
+ovirt-engine:
+  build: ./$MAJOR_VERSION
+  environment:
+    - OVIRT_PASSWORD=engine
+    - POSTGRES_DB=engine
+    - POSTGRES_HOST=postgres
+    - HOST_ENCRYPT=false
+    - HOST_INSTALL=false
+  links:
+    - postgres
+  ports:
+    - 8443:8443
+    - 8080:8080
+
+postgres:
+  image: rmohr/ovirt-postgres
+  environment:
+    - POSTGRES_PASSWORD=engine
+    - POSTGRES_USER=engine
+    - POSTGRES_DB=engine
