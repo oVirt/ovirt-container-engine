@@ -51,5 +51,8 @@ VOLUME /var/lib/ovirt-engine/backups
 ENV HOST_ENCRYPT=true
 # Try to provision hosts when they are added
 ENV HOST_INSTALL=true
+# Use host identifier when talking with the host, so that the host sees who it is from the engines view.
+# This is valuable when working with ovirt-vdsmfake
+ENV HOST_USE_IDENTIFIER=false
 
 CMD bash /entrypoint.sh
