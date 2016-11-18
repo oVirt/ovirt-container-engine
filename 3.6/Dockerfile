@@ -25,6 +25,11 @@ USER root
 RUN yum -y localinstall http://resources.ovirt.org/pub/yum-repo/ovirt-release36.rpm \
     && yum -y install ovirt-engine patch \
     && yum -y clean all
+
+# dockerize helps us waiting for postgres being ready
+ENV DOCKERIZE_VERSION v0.2.0
+RUN curl -OL https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
     
 # engine-setup needs the link to initctl
 RUN ln -s /usr/sbin/service /usr/bin/initctl

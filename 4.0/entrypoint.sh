@@ -16,6 +16,9 @@ echo OVESETUP_PKI/organization=str:$OVIRT_PKI_ORGANIZATION >> answers.conf
 # Mounts on kubernetes hide the original files in the image.
 cp -a /etc/pki/ovirt-engine.tmpl/* /etc/pki/ovirt-engine/
 
+# Wait for postgres
+dockerize -wait tcp://${POSTGRES_HOST}:${POSTGRES_PORT} -timeout 1m
+
 engine-setup --config=answers.conf --offline
 
 if [ -n "$SPICE_PROXY" ]; then
