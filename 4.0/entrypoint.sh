@@ -22,6 +22,22 @@ if [ -n "$SPICE_PROXY" ]; then
   engine-config -s SpiceProxyDefault=$SPICE_PROXY
 fi
 
+# SSO configuration
+echo SSO_ALTERNATE_ENGINE_FQDNS="\"$SSO_ALTERNATE_ENGINE_FQDNS\"" >> /etc/ovirt-engine/engine.conf.d/999-ovirt-engine.conf
+echo ENGINE_SSO_SERVICE_SSL_VERIFY_HOST=false >> /etc/ovirt-engine/engine.conf.d/999-ovirt-engine.conf
+
+if [ -n "$ENGINE_SSO_AUTH_URL" ]; then
+  echo ENGINE_SSO_INSTALLED_ON_ENGINE_HOST=false >> /etc/ovirt-engine/engine.conf.d/999-ovirt-engine.conf
+  echo "ENGINE_SSO_AUTH_URL=\"$ENGINE_SSO_AUTH_URL\"" >> /etc/ovirt-engine/engine.conf.d/999-ovirt-engine.conf
+else
+  echo "ENGINE_SSO_AUTH_URL=\"https://${OVIRT_FQDN}:${HTTPS_PORT}/ovirt-engine/sso\"" >> /etc/ovirt-engine/engine.conf.d/999-ovirt-engine.conf
+fi
+
+echo SSO_CALLBACK_PREFIX_CHECK=false >> /etc/ovirt-engine/engine.conf.d/999-ovirt-engine.conf
+echo "ENGINE_SSO_SERVICE_URL=\"https://${OVIRT_FQDN}:${HTTPS_PORT}/ovirt-engine/sso\"" >> /etc/ovirt-engine/engine.conf.d/999-ovirt-engine.conf
+echo "ENGINE_BASE_URL=\"https://${OVIRT_FQDN}:${HTTPS_PORT}/ovirt-engine/\"" >> /etc/ovirt-engine/engine.conf.d/999-ovirt-engine.conf
+echo "SSO_ENGINE_URL=\"https://${OVIRT_FQDN}:${HTTPS_PORT}/ovirt-engine/\"" >> /etc/ovirt-engine/engine.conf.d/999-ovirt-engine.conf
+
 export PGPASSWORD=$POSTGRES_PASSWORD
 psql $POSTGRES_DB -h $POSTGRES_HOST -p $POSTGRES_PORT  -U $POSTGRES_USER -c "UPDATE vdc_options set option_value = '$HOST_ENCRYPT' WHERE option_name = 'SSLEnabled';"
 psql $POSTGRES_DB -h $POSTGRES_HOST -p $POSTGRES_PORT  -U $POSTGRES_USER -c "UPDATE vdc_options set option_value = '$HOST_ENCRYPT' WHERE option_name = 'EncryptHostCommunication';"

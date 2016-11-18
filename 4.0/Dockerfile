@@ -52,4 +52,8 @@ ENV HOST_ENCRYPT=true
 # Try to provision hosts when they are added
 ENV HOST_INSTALL=true
 
+# Public reachable HTTPS port
+ENV HTTPS_PORT 8443
+ENV SSO_ALTERNATE_ENGINE_FQDNS="localhost:8443 127.0.0.1:8443"
+
 CMD bash /entrypoint.sh
