@@ -60,4 +60,8 @@ ENV HOST_INSTALL=true
 # This is valuable when working with ovirt-vdsmfake
 ENV HOST_USE_IDENTIFIER=false
 
+# Public reachable HTTPS port
+ENV HTTPS_PORT 8443
+ENV SSO_ALTERNATE_ENGINE_FQDNS="localhost:8443 127.0.0.1:8443"
+
 CMD bash /entrypoint.sh
