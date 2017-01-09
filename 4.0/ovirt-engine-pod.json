@@ -44,7 +44,7 @@
           },
           {
             "name": "POSTGRES_PASSWORD",
-            "value": "engine"
+            "value": "YOUR_POSTGRES_PASSWORD_HERE"
           },
           {
             "name": "POSTGRES_DB",
@@ -60,11 +60,11 @@
           },
           {
             "name": "OVIRT_FQDN",
-            "value": "localhost"
+            "value": "YOUR_ENGINE_FQDN_HERE"
           },
           {
             "name": "OVIRT_PASSWORD",
-            "value": "engine"
+            "value": "YOUR_OVIRT_ENGINE_PASSWORD_HERE"
           },
           {
             "name": "OVIRT_PKI_ORGANIZATION",
@@ -99,7 +99,7 @@
           },
           {
             "name": "POSTGRES_PASSWORD",
-            "value": "engine"
+            "value": "YOUR_POSTGRES_PASSWORD_HERE"
           },
           {
             "name": "POSTGRES_DB",
