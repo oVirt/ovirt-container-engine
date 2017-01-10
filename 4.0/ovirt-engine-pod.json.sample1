@@ -1,0 +1,156 @@
+{
+  "kind": "Pod",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "ovirt-engine",
+    "labels": {
+      "app": "ovirt-engine"
+    }
+  },
+  "spec": {
+    "containers": [
+      {
+        "name": "ovirt-engine",
+        "image": "rmohr/ovirt-engine:4.0",
+        "imagePullPolicy": "Always",
+        "ports": [
+          {
+            "containerPort": 8080,
+            "name": "engine"
+          },
+          {
+            "containerPort": 8443,
+            "name": "engine-tls"
+          }
+        ],
+        "volumeMounts": [
+          {
+            "name": "certs",
+            "mountPath": "/etc/pki/ovirt-engine"
+          },
+          {
+            "name": "backups",
+            "mountPath": "/var/lib/ovirt-engine/backups"
+          },
+          {
+            "name": "plugins",
+            "mountPath": "/usr/share/ovirt-engine/ui-plugins/"
+          }
+        ],
+        "env": [
+          {
+            "name": "POSTGRES_USER",
+            "value": "engine"
+          },
+          {
+            "name": "POSTGRES_PASSWORD",
+            "value": "YOUR_POSTGRES_PASSWORD_HERE"
+          },
+          {
+            "name": "POSTGRES_DB",
+            "value": "engine"
+          },
+          {
+            "name": "POSTGRES_HOST",
+            "value": "localhost"
+          },
+          {
+            "name": "POSTGRES_PORT",
+            "value": "5432"
+          },
+          {
+            "name": "OVIRT_FQDN",
+            "value": "YOUR_ENGINE_FQDN_HERE"
+          },
+          {
+            "name": "OVIRT_PASSWORD",
+            "value": "YOUR_OVIRT_ENGINE_PASSWORD_HERE"
+          },
+          {
+            "name": "OVIRT_PKI_ORGANIZATION",
+            "value": "oVirt"
+          },
+          {
+            "name": "SPICE_PROXY",
+            "value": "http://YOUR_IP_HERE:3128"
+          }
+        ]
+      },
+      {
+        "name": "postgres",
+        "image": "rmohr/ovirt-postgres:9.2.15",
+        "imagePullPolicy": "Always",
+        "ports": [
+          {
+            "containerPort": 5432,
+            "name": "ovirt-postgres"
+          }
+        ],
+        "volumeMounts": [
+          {
+            "name": "pgdata",
+            "mountPath": "/var/lib/postgresql/data"
+          }
+        ],
+        "env": [
+          {
+            "name": "POSTGRES_USER",
+            "value": "engine"
+          },
+          {
+            "name": "POSTGRES_PASSWORD",
+            "value": "YOUR_POSTGRES_PASSWORD_HERE"
+          },
+          {
+            "name": "POSTGRES_DB",
+            "value": "engine"
+          }
+        ]
+      },
+      {
+        "name": "spice-proxy",
+        "image": "rmohr/spice-squid",
+        "imagePullPolicy": "Always",
+        "ports": [
+          {
+            "containerPort": 3128,
+            "name": "spice-proxy"
+          }
+        ]
+      }
+    ],
+    "volumes": [
+      {
+        "name": "certs",
+        "nfs": {
+          "server": "YOUR_NFS_URL_HERE",
+          "path": "YOUR_NFS_PATH_HERE/certs"
+        }
+      },
+      {
+        "name": "backups",
+        "nfs": {
+          "server": "YOUR_NFS_URL_HERE",
+          "path": "YOUR_NFS_PATH_HERE/backups"
+        }
+      },
+      {
+        "name": "pgdata",
+        "nfs": {
+          "server": "YOUR_NFS_URL_HERE",
+          "path": "YOUR_NFS_PATH_HERE/pgdata"
+        }
+      },
+      {
+        "name": "plugins",
+        "nfs": {
+          "server": "YOUR_NFS_URL_HERE",
+          "path": "YOUR_NFS_PATH_HERE/plugins"
+        }
+      }
+    ],
+    "nodeSelector": {
+      "kubernetes.io/hostname": "YOUR_TARGET_HOSTNAME_HERE"
+    }
+  }
+}
