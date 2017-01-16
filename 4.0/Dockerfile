@@ -59,6 +59,9 @@ ENV HOST_INSTALL=true
 # Use host identifier when talking with the host, so that the host sees who it is from the engines view.
 # This is valuable when working with ovirt-vdsmfake
 ENV HOST_USE_IDENTIFIER=false
+# HACK: Config BlockMigrationOnSwapUsagePercentage so that the vm will start in ovirt-engine
+# For some reason this check fails the start vm - this should be figured out instead of this hack
+ENV BLOCK_MIGRATION_ON_SWAP_USAGE_PERCENTAGE=9999
 
 # Public reachable HTTPS port
 ENV HTTPS_PORT 8443
