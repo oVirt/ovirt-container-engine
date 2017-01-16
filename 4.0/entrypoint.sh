@@ -42,11 +42,11 @@ echo "ENGINE_BASE_URL=\"https://${OVIRT_FQDN}:${HTTPS_PORT}/ovirt-engine/\"" >> 
 echo "SSO_ENGINE_URL=\"https://${OVIRT_FQDN}:${HTTPS_PORT}/ovirt-engine/\"" >> /etc/ovirt-engine/engine.conf.d/999-ovirt-engine.conf
 
 export PGPASSWORD=$POSTGRES_PASSWORD
-psql $POSTGRES_DB -h $POSTGRES_HOST -p $POSTGRES_PORT  -U $POSTGRES_USER -c "UPDATE vdc_options set option_value = '$HOST_ENCRYPT' WHERE option_name = 'SSLEnabled';"
-psql $POSTGRES_DB -h $POSTGRES_HOST -p $POSTGRES_PORT  -U $POSTGRES_USER -c "UPDATE vdc_options set option_value = '$HOST_ENCRYPT' WHERE option_name = 'EncryptHostCommunication';"
-psql $POSTGRES_DB -h $POSTGRES_HOST -p $POSTGRES_PORT  -U $POSTGRES_USER -c "UPDATE vdc_options set option_value = '$HOST_INSTALL' where option_name = 'InstallVds';"
-psql $POSTGRES_DB -h $POSTGRES_HOST -p $POSTGRES_PORT  -U $POSTGRES_USER -c "UPDATE vdc_options set option_value = '$HOST_USE_IDENTIFIER' WHERE option_name = 'UseHostNameIdentifier';"
 
+engine-config -s SSLEnabled=$HOST_ENCRYPT
+engine-config -s EncryptHostCommunication=$HOST_ENCRYPT
+engine-config -s InstallVds=$HOST_INSTALL
+engine-config -s UseHostNameIdentifier=$HOST_USE_IDENTIFIER
 engine-config -s BlockMigrationOnSwapUsagePercentage=$BLOCK_MIGRATION_ON_SWAP_USAGE_PERCENTAGE
 
 su -m -s /bin/python ovirt /usr/share/ovirt-engine/services/ovirt-engine/ovirt-engine.py start
