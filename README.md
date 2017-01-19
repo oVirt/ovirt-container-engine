@@ -1,6 +1,6 @@
 # docker-ovirt-engine
 
-[![Build Status](https://travis-ci.org/rmohr/docker-ovirt-engine.svg?branch=master)](https://travis-ci.org/rmohr/docker-ovirt-engine)
+[![Build Status](https://travis-ci.org/ovirt/ovirt-container-engine.svg?branch=master)](https://travis-ci.org/ovirt/ovirt-container-engine)
 
 Dockerized version of ovirt-engine, the management part of oVirt.
 
