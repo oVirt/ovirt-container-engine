@@ -43,9 +43,10 @@ echo "SSO_ENGINE_URL=\"https://${OVIRT_FQDN}:${HTTPS_PORT}/ovirt-engine/\"" >> /
 
 export PGPASSWORD=$POSTGRES_PASSWORD
 
+psql $POSTGRES_DB -h $POSTGRES_HOST -p $POSTGRES_PORT  -U $POSTGRES_USER -c "UPDATE vdc_options set option_value = '$HOST_INSTALL' where option_name = 'InstallVds';"
+
 engine-config -s SSLEnabled=$HOST_ENCRYPT
 engine-config -s EncryptHostCommunication=$HOST_ENCRYPT
-engine-config -s InstallVds=$HOST_INSTALL
 engine-config -s UseHostNameIdentifier=$HOST_USE_IDENTIFIER
 engine-config -s BlockMigrationOnSwapUsagePercentage=$BLOCK_MIGRATION_ON_SWAP_USAGE_PERCENTAGE
 
