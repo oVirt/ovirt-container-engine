@@ -30,7 +30,7 @@ RUN yum -y localinstall http://resources.ovirt.org/pub/yum-repo/ovirt-release40.
 ENV DOCKERIZE_VERSION v0.2.0
 RUN curl -OL https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
     && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
-    
+
 # engine-setup needs the link to initctl
 RUN ln -s /usr/sbin/service /usr/bin/initctl
 
@@ -45,7 +45,7 @@ COPY 999-ovirt-engine.conf /etc/ovirt-engine/engine.conf.d/
 RUN patch -p0 < setup.patch
 
 # For kubernetes copy pki template files to a backup directory
-RUN cp -a /etc/pki/ovirt-engine /etc/pki/ovirt-engine.tmpl
+RUN cp -a --no-preserve=ownership /etc/pki/ovirt-engine /etc/pki/ovirt-engine.tmpl
 
 # Persist this folder to keep the generated TLS certificates on the first start
 VOLUME /etc/pki/ovirt-engine

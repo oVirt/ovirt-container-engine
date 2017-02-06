@@ -1,0 +1,91 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: ovirt-engine
+  name: ovirt-engine
+spec:
+  containers:
+    - image: rmohr/spice-squid
+      name: spice-proxy
+      imagePullPolicy: "IfNotPresent"
+      ports:
+        - containerPort: 3128
+          name: spice-proxy
+
+    - image: rmohr/ovirt-postgres:latest
+      name: postgres
+      imagePullPolicy: "IfNotPresent"
+      ports:
+        - containerPort: 5432
+          name: ovirt-postgres
+      volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: pgdata
+      env:
+        - name: POSTGRES_USER
+          value: engine
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              name: ovirt-engine-config
+              key: postgres.password
+        - name: POSTGRES_DB
+          value: engine
+
+    - image: docker.io/bronhaim/ovirt-engine:4.0
+      name: ovirt-engine
+      imagePullPolicy: "Always"
+      ports:
+        - containerPort: 8080
+          name: engine
+        - containerPort: 8443
+          name: engine-tls
+      volumeMounts:
+        - mountPath: /etc/pki/ovirt-engine
+          name: certs
+        - mountPath: /var/lib/ovirt-engine/backups
+          name: backups
+        - mountPath: /usr/share/ovirt-engine/ui-plugins/
+          name: plugins
+      env:
+        - name: POSTGRES_USER
+          value: engine
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              name: ovirt-engine-config
+              key: postgres.password
+        - name: POSTGRES_DB
+          value: engine
+        - name: POSTGRES_HOST
+          value: localhost
+        - name: POSTGRES_PORT
+          value: "5432"
+        - name: OVIRT_FQDN
+          valueFrom:
+            configMapKeyRef:
+              name: ovirt-engine-config
+              key: engine.fqdn
+        - name: OVIRT_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              name: ovirt-engine-config
+              key: engine.password
+        - name: OVIRT_PKI_ORGANIZATION
+          value: oVirt
+        - name: SPICE_PROXY
+          valueFrom:
+            configMapKeyRef:
+              name: ovirt-engine-config
+              key: spice.gateway.address
+
+  volumes:
+    - emptyDir: {}
+      name: certs
+    - emptyDir: {}
+      name: backups
+    - emptyDir: {}
+      name: pgdata
+    - emptyDir: {}
+      name: plugins
