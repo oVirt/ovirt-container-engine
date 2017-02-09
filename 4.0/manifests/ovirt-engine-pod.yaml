@@ -24,7 +24,7 @@ spec:
           name: pgdata
       env:
         - name: POSTGRES_USER
-          value: engine
+          value: postgres
         - name: POSTGRES_PASSWORD
           valueFrom:
             configMapKeyRef:
@@ -50,7 +50,7 @@ spec:
           name: plugins
       env:
         - name: POSTGRES_USER
-          value: engine
+          value: postgres
         - name: POSTGRES_PASSWORD
           valueFrom:
             configMapKeyRef:
