@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: mypostgres
+  name: mypostgres
+spec:
+  containers:
+    - image: postgres:latest
+      name: postgres
+      imagePullPolicy: "IfNotPresent"
+      ports:
+        - containerPort: 5432
+          name: ovirt-postgres
+      volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: pgdata
+  volumes:
+    - name: pgdata
+      persistentVolumeClaim:
+        claimName: pgdata-pvc
