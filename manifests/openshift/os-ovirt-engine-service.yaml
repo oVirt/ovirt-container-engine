@@ -1,23 +1,23 @@
 apiVersion: v1
 kind: Service
 metadata:
+  label:
+    name: ovirt-engine
   name: ovirt-engine
 spec:
-  externalIPs:
-    - 192.168.200.2
   ports:
     - name: engine
       port: 80
       protocol: TCP
-      targetPort: engine
+      targetPort: 8080
     - name: engine-tls
       port: 443
       protocol: TCP
-      targetPort: engine-tls
+      targetPort: 8443
     - name: spice-proxy
       port: 3128
       protocol: TCP
-      targetPort: spice-proxy
+      targetPort: 3128
   selector:
     app: ovirt-engine
   sessionAffinity: None

@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: buga
+  name: buga
+spec:
+  hostIPC: true
+  privilegedContainer: true
+  containers:
+    #- image: training/webapp:latest
+    - image: docker.io/bronhaim/systemd_test:latest
+      name: buga
+      imagePullPolicy: "Always"
+      ports:
+        - containerPort: 5000
+          protocol: TCP
+      securityContext:
+        privileged: true
+      volumeMounts:
+        - name: sys-fs-cgroup
+          mountPath: /sys/fs/cgroup
+          readOnly: true
+        - name: dev
+          mountPath: /dev
+        - name: boot
+          mountPath: /boot
+      #  - mountPath: /tmp/buga
+          #name: buga
+  volumes:
+    - name: sys-fs-cgroup
+      hostPath:
+        path: /sys/fs/cgroup
+    - name: dev
+      hostPath:
+        path: /dev
+    - name: boot
+      hostPath:
+        path: /boot
+  #  - name: buga
+  #    nfs:
+  #      path: "/nfsshare/pgdata"
+  #      server: dhcp-0-174.tlv.redhat.com
