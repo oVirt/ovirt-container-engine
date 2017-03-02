@@ -2,8 +2,8 @@ apiVersion: v1
 kind: Pod
 metadata:
   labels:
-    app: ovirt-engine
-  name: ovirt-engine
+    app: ovirt-engine-simple
+  name: ovirt-engine-simple
 spec:
   containers:
     - image: rmohr/spice-squid
@@ -13,7 +13,7 @@ spec:
         - containerPort: 3128
           protocol: TCP
 
-    - image: docker.io/bronhaim/miq-postgresql:9.5
+    - image: rmohr/ovirt-postgres:latest
       name: postgres
       imagePullPolicy: "IfNotPresent"
       ports:
@@ -23,16 +23,16 @@ spec:
         - mountPath: /var/lib/postgresql/data
           name: pgdata
       env:
-        - name: POSTGRESQL_USER
+        - name: POSTGRES_USER
           value: engine
-        - name: POSTGRESQL_PASSWORD
+        - name: POSTGRES_PASSWORD
           value: engine
-        - name: POSTGRESQL_DATABASE
+        - name: POSTGRES_DATABASE
           value: engine
 
-    - image: docker.io/bronhaim/ovirt-engine:4.1
+    - image: docker.io/bronhaim/ovirt-engine:4.0
       name: ovirt-engine
-      imagePullPolicy: "IfNotPresent"
+      imagePullPolicy: "Always"
       ports:
         - containerPort: 8080
           protocol: TCP
@@ -56,8 +56,10 @@ spec:
           value: localhost
         - name: POSTGRES_PORT
           value: "5432"
+        - name: ENGINE_FQDN
+          value: dhcp-1-110.tlv.redhat.com
         - name: OVIRT_FQDN
-          value: ovirt-engine.192.168.42.143.xip.io
+          value: dhcp-1-110.tlv.redhat.com 
         - name: OVIRT_PASSWORD
           value: engine
         - name: OVIRT_PKI_ORGANIZATION

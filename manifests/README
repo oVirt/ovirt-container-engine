@@ -7,5 +7,4 @@ chown the folder to be owned by uid and gid 999 (that's the uid and gui of postg
 certs plugins and backup dir are owned by root and needs to be exported with the following:
 /exports/certs  *(rw,anonuid=0,anongid=0,all_squash,sync,no_subtree_check)
 /exports/plugins  *(rw,anonuid=0,anongid=0,all_squash,sync,no_subtree_check)
-/exports/backup  *(rw,anonuid=0,anongid=0,all_squash,sync,no_subtree_check)
-
+/exports/backups  *(rw,anonuid=0,anongid=0,all_squash,sync,no_subtree_check)

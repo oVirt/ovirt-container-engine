@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  label:
-    name: ovirt-engine
-  name: ovirt-engine
+  labels:
+    app: ovirt-engine-simple
+  name: ovirt-engine-simple
 spec:
   ports:
     - name: engine
@@ -19,7 +19,7 @@ spec:
       protocol: TCP
       targetPort: 3128
   selector:
-    app: ovirt-engine
+    app: ovirt-engine-simple
   sessionAffinity: None
   type: ClusterIP
 status:

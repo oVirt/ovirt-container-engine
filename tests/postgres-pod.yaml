@@ -6,7 +6,7 @@ metadata:
   name: miq-postgresql
 spec:
   containers:
-    - image: docker.io/bronhaim/miq-postgresql:9.5
+    - image: rmohr/ovirt-postgres:latest
       name: postgres
       imagePullPolicy: "IfNotPresent"
       ports:
@@ -16,15 +16,13 @@ spec:
         - mountPath: /var/lib/postgresql/data
           name: pgdata
       env:
-        - name: POSTGRESQL_USER
+        - name: POSTGRES_USER
           value: engine
-        - name: POSTGRESQL_PASSWORD
+        - name: POSTGRES_PASSWORD
           value: engine
-        - name: POSTGRESQL_DATABASE
+        - name: POSTGRES_DATABASE
           value: engine
 
   volumes:
-    - name: pgdata
-      nfs:
-        path: "/nfsshare/pgdata"
-        server: dhcp-0-174.tlv.redhat.com
+    - emptyDir: {}
+      name: pgdata
