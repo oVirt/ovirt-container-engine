@@ -59,7 +59,7 @@ spec:
         - name: ENGINE_FQDN
           value: dhcp-1-110.tlv.redhat.com
         - name: OVIRT_FQDN
-          value: dhcp-1-110.tlv.redhat.com 
+          value: dhcp-1-110.tlv.redhat.com
         - name: OVIRT_PASSWORD
           value: engine
         - name: OVIRT_PKI_ORGANIZATION
