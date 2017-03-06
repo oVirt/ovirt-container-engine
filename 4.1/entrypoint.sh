@@ -33,15 +33,14 @@ if [ -n "$ENGINE_SSO_AUTH_URL" ]; then
   echo ENGINE_SSO_INSTALLED_ON_ENGINE_HOST=false >> /etc/ovirt-engine/engine.conf.d/999-ovirt-engine.conf
   echo "ENGINE_SSO_AUTH_URL=\"$ENGINE_SSO_AUTH_URL\"" >> /etc/ovirt-engine/engine.conf.d/999-ovirt-engine.conf
 else
-  echo "ENGINE_SSO_AUTH_URL=\"https://${OVIRT_FQDN}:${HTTPS_PORT}/ovirt-engine/sso\"" >> /etc/ovirt-engine/engine.conf.d/999-ovirt-engine.conf
+  echo "ENGINE_SSO_AUTH_URL=\"https://${OVIRT_FQDN}/ovirt-engine/sso\"" >> /etc/ovirt-engine/engine.conf.d/999-ovirt-engine.conf
 fi
 
 echo SSO_CALLBACK_PREFIX_CHECK=false >> /etc/ovirt-engine/engine.conf.d/999-ovirt-engine.conf
-echo "ENGINE_SSO_SERVICE_URL=\"https://${OVIRT_FQDN}:${HTTPS_PORT}/ovirt-engine/sso\"" >> /etc/ovirt-engine/engine.conf.d/999-ovirt-engine.conf
-echo "ENGINE_BASE_URL=\"https://${OVIRT_FQDN}:${HTTPS_PORT}/ovirt-engine/\"" >> /etc/ovirt-engine/engine.conf.d/999-ovirt-engine.conf
-echo "SSO_ENGINE_URL=\"https://${OVIRT_FQDN}:${HTTPS_PORT}/ovirt-engine/\"" >> /etc/ovirt-engine/engine.conf.d/999-ovirt-engine.conf
+echo "ENGINE_SSO_SERVICE_URL=\"https://localhost:8443/ovirt-engine/sso\"" >> /etc/ovirt-engine/engine.conf.d/999-ovirt-engine.conf
+echo "ENGINE_BASE_URL=\"https://${OVIRT_FQDN}/ovirt-engine/\"" >> /etc/ovirt-engine/engine.conf.d/999-ovirt-engine.conf
+echo "SSO_ENGINE_URL=\"https://localhost:8443/ovirt-engine/\"" >> /etc/ovirt-engine/engine.conf.d/999-ovirt-engine.conf
 
-echo "ENGINE_SSO_SERVICE_URL=\"https://${OVIRT_FQDN}:${HTTPS_PORT}/ovirt-engine/sso\"" >> /etc/ovirt-engine/engine.conf.d/11-setup-sso.conf
 export PGPASSWORD=$POSTGRES_PASSWORD
 
 psql $POSTGRES_DB -h $POSTGRES_HOST -p $POSTGRES_PORT  -U $POSTGRES_USER -c "UPDATE vdc_options set option_value = '$HOST_INSTALL' where option_name = 'InstallVds';"

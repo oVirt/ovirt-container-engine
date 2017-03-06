@@ -30,9 +30,9 @@ spec:
         - name: POSTGRES_DATABASE
           value: engine
 
-    - image: docker.io/bronhaim/ovirt-engine:4.0
+    - image: docker.io/bronhaim/ovirt-engine:4.1
       name: ovirt-engine
-      imagePullPolicy: "Always"
+      imagePullPolicy: "IfNotPresent"
       ports:
         - containerPort: 8080
           protocol: TCP
