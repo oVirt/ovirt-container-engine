@@ -11,6 +11,7 @@ echo OVESETUP_ENGINE_CONFIG/fqdn=str:$OVIRT_FQDN >> answers.conf
 echo OVESETUP_CONFIG/fqdn=str:$OVIRT_FQDN >> answers.conf
 echo OVESETUP_CONFIG/adminPassword=str:$OVIRT_PASSWORD >> answers.conf
 echo OVESETUP_PKI/organization=str:$OVIRT_PKI_ORGANIZATION >> answers.conf
+echo OVESETUP_CONFIG/adminUserId=str:$OVIRT_ADMIN_UID >> answers.conf
 
 # Copy pki template files into original template location.
 # Mounts on kubernetes hide the original files in the image.

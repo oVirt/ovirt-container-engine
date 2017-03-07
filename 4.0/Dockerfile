@@ -63,6 +63,11 @@ ENV HOST_USE_IDENTIFIER=false
 # For some reason this check fails the start vm - this should be figured out instead of this hack
 ENV BLOCK_MIGRATION_ON_SWAP_USAGE_PERCENTAGE=9999
 
+# If attaching a fresh engine to an already existing DB, override this UID with
+# the UID of the admin user in that DB, to avoid the recration of the admin
+# user.
+ENV OVIRT_ADMIN_UID=49ec00bb-34d9-4cd0-a996-44b88b7c1098
+
 # Public reachable HTTPS port
 ENV HTTPS_PORT 8443
 ENV SSO_ALTERNATE_ENGINE_FQDNS="localhost:8443 127.0.0.1:8443"
