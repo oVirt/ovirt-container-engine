@@ -1,5 +1,5 @@
 # oVirt-Containers 4.1
-The repository includes CI to build images and run manifests definitions of ovirt componants over openshift environment
+The repository includes CI to build images and run manifests definitions of ovirt components over openshift environment
 
 # Details
 The orchestration includes ovirt-engine deployment and kube-vdsm deamonset.
