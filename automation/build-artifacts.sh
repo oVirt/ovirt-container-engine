@@ -2,11 +2,11 @@
 [[ -d exported-artifacts ]] \
 || mkdir -p exported-artifacts
 
-IMG_PREFIX="ovirt/"
+IMG_PREFIX="docker.io/ovirt/"
 IMAGES_PATH="./image-specifications"
-NODE_PATH="image-specifications/Engine"
 
 # we can use here "git describe --all" if we want to keep image history
+# but then we need to change openshift deployment to use this tag
 TAGV="4.1"
 
 function clean_up {
@@ -16,29 +16,10 @@ function clean_up {
 trap clean_up SIGHUP SIGINT SIGTERM
 cd ${IMAGES_PATH}
 
-ENGINE="engine"
-cd ${ENGINE}
-
-docker build -t ${IMG_PREFIX}${ENGINE}:${TAGV} .
-
-NODE="node"
-cd ../
-cd ${NODE}
-docker build -t ${IMG_PREFIX}${NODE}:${TAGV} .
-
-POSTGRES="postgres"
-cd ../
-cd ${POSTGRES}
-docker build -t ${IMG_PREFIX}${POSTGRES}:${TAGV} .
-
-SYSLOG="syslog"
-cd ../
-cd ${SYSLOG}
-docker build -t ${IMG_PREFIX}${SYSLOG}:${TAGV} .
-
-docker save ${IMG_PREFIX}${ENGINE}:${TAGV} | gzip > ../exported-artifacts/${CNAME/\//-}-${TAGV}.tar.gz
-docker save ${IMG_PREFIX}${NODE}:${TAGV} | gzip > ../exported-artifacts/${CNAME/\//-}-${TAGV}.tar.gz
-docker save ${IMG_PREFIX}${POSTGRES}:${TAGV} | gzip > ../exported-artifacts/${CNAME/\//-}-${TAGV}.tar.gz
-docker save ${IMG_PREFIX}${SYSLOG}:${TAGV} | gzip > ../exported-artifacts/${CNAME/\//-}-${TAGV}.tar.gz
+for img in "engine" "node" "ovirt-postgres" "syslog" "spice-squid"
+do
+  docker build -t ${IMG_PREFIX}${img}:${TAGV} .
+  docker push ${IMG_PREFIX}${img}:${TAGV}
+done
 
 clean_up
