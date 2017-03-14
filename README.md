@@ -1,4 +1,4 @@
-# oVirt-Containers 4.0
+# oVirt-Containers 4.1
 The repository includes CI to build images and run manifests definitions of ovirt componants over openshift environment
 
 # Details
