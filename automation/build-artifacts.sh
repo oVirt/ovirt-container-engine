@@ -6,7 +6,8 @@ IMG_PREFIX="ovirt/"
 IMAGES_PATH="./image-specifications"
 NODE_PATH="image-specifications/Engine"
 
-TAGV=`git describe`
+# we can use here "git describe --all" if we want to keep image history
+TAGV="4.1"
 
 function clean_up {
     docker images -f dangling=true -q | xargs -r docker rmi
