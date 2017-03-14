@@ -12,14 +12,14 @@ spec:
       restartPolicy: "Always"
       hostIPC: true
       containers:
-        - image: docker.io/ovirt/syslog:4.1
+        - image: docker.io/bronhaim/vdsm-kube-logger:latest
           name: vdsm-kube-logger
           imagePullPolicy: "IfNotPresent"
           ports:
             - containerPort: 514
               protocol: TCP
 
-        - image: docker.io/ovirt/node:4.1
+        - image: docker.io/bronhaim/vdsm-kube:latest
           name: vdsm-kube
           ports:
             - containerPort: 54321
