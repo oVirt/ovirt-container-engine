@@ -1,15 +1,21 @@
 #!/bin/bash -xe
-# TODO validate Dockerfile syntax
-# This code should be replaced with a real verification.
-# Currently, just checking docker build in STD-CI
 [[ -d exported-artifacts ]] \
 || mkdir -p exported-artifacts
 
 CNAME="ovirt/engine-monolithic"
-OVERSION="4.0"
+ENGINE="image-specifications/Engine"
 SUFFIX="$(date -u +%Y%m%d%H%M%S).git$(git rev-parse --short HEAD)"
-TAGV=${OVERSION}-${SUFFIX}
+TAGV=4.1
 
-cd ${OVERSION}
+function clean_up {
+    docker rmi ${CNAME}:${TAGV}
+    docker images -f dangling=true -q | xargs -r docker rmi
+}
+
+trap clean_up SIGHUP SIGINT SIGTERM
+cd ${ENGINE}
 docker build --no-cache --pull -t ${CNAME}:${TAGV} -f Dockerfile .
 docker save ${CNAME}:${TAGV} | gzip > ../exported-artifacts/${CNAME/\//-}-${TAGV}.tar.gz
+clean_up
+
+# we need to do it for all images

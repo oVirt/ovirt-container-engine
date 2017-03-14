@@ -3,9 +3,9 @@
 || mkdir -p exported-artifacts
 
 CNAME="ovirt/engine-monolithic"
-OVERSION="4.0"
+ENGINE="image-specifications/Engine"
 SUFFIX="$(date -u +%Y%m%d%H%M%S).git$(git rev-parse --short HEAD)"
-TAGV=${OVERSION}-${SUFFIX}
+TAGV=4.1
 
 function clean_up {
     docker rmi ${CNAME}:${TAGV}
@@ -13,7 +13,9 @@ function clean_up {
 }
 
 trap clean_up SIGHUP SIGINT SIGTERM
-cd ${OVERSION}
+cd ${ENGINE}
 docker build --no-cache --pull -t ${CNAME}:${TAGV} -f Dockerfile .
 docker save ${CNAME}:${TAGV} | gzip > ../exported-artifacts/${CNAME/\//-}-${TAGV}.tar.gz
 clean_up
+
+# we need to do it for all images

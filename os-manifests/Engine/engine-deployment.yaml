@@ -1,0 +1,179 @@
+apiVersion: v1
+kind: List
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: ovirt-engine
+  spec:
+    ports:
+    - name: ovirt-engine
+      port: 443
+      targetPort: 8443
+      tls:
+        termination: passthrough
+    - name: ovirt-spice-proxy
+      port: 3128
+      targetPort: 3128
+    - name: ovirt-engine-debug
+      port: 8787
+      targetPort: 8787
+    selector:
+      deploymentconfig: ovirt-engine
+    type: ClusterIP
+
+- apiVersion: v1
+  kind: Route
+  metadata:
+    name: ovirt-engine
+  spec:
+    to:
+      kind: Service
+      name: ovirt-engine
+    port:
+      targetPort: ovirt-engine
+    tls:
+      termination: passthrough
+    wildcardPolicy: None
+
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: ovirt-db-claim
+  spec:
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: 10Gi
+    volumeName: ovirt-db-volume
+
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: ovirt-engine-claim
+  spec:
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: 10Gi
+    volumeName: ovirt-engine-volume
+
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    name: ovirt-engine
+  spec:
+    replicas: 1
+    selector:
+      deploymentconfig: ovirt-engine
+    strategy:
+      # We set the type of strategy to Recreate, which means that it will be scaled down prior to being scaled up
+      type: Recreate
+    template:
+      metadata:
+        labels:
+          app: ovirt-engine
+          deploymentconfig: ovirt-engine
+        name: ovirt-engine
+      spec:
+        containers:
+          - image: rmohr/spice-squid
+            name: spice-proxy
+            imagePullPolicy: "Always"
+            ports:
+              - containerPort: 3128
+                protocol: TCP
+
+          - image: marsik/ovirt-postgres:9.2.18
+            name: postgres
+            imagePullPolicy: "Always"
+            ports:
+              - containerPort: 5432
+                protocol: TCP
+            volumeMounts:
+              - mountPath: /var/lib/postgresql/data
+                name: pgdata
+            env:
+              - name: POSTGRES_USER
+                value: engine
+              - name: POSTGRES_PASSWORD
+                value: engine
+              - name: POSTGRES_DATABASE
+                value: engine
+
+          - image: docker.io/bronhaim/ovirt-engine:4.1
+            name: ovirt-engine
+            imagePullPolicy: "Always"
+            ports:
+              - containerPort: 8080
+                protocol: TCP
+              - containerPort: 8443
+                protocol: TCP
+              - containerPort: 8787
+                protocol: TCP
+            volumeMounts:
+              - mountPath: /etc/pki/ovirt-engine
+                name: engine-data
+                subPath: pki
+              - mountPath: /var/lib/ovirt-engine/backups
+                name: engine-data
+                subPath: backups
+              - mountPath: /usr/share/ovirt-engine/ui-plugins/
+                name: engine-data
+                subPath: ui-plugins
+              - mountPath: /etc/ovirt-engine/ui-plugins/
+                name: engine-data
+                subPath: ui-plugins-etc
+            livenessProbe:
+              httpGet:
+                path: /ovirt-engine/services/health
+                port: 8443
+                scheme: HTTPS
+              initialDelaySeconds: 600
+              timeoutSeconds: 5
+              periodSeconds: 60
+              successThreshold: 1
+              failureThreshold: 3
+            readinessProbe:
+              httpGet:
+                path: /ovirt-engine/services/health
+                port: 8443
+                scheme: HTTPS
+              initialDelaySeconds: 30
+              timeoutSeconds: 5
+              periodSeconds: 10
+              successThreshold: 1
+              failureThreshold: 3
+            env:
+              - name: POSTGRES_USER
+                value: engine
+              - name: POSTGRES_PASSWORD
+                value: engine
+              - name: POSTGRES_DB
+                value: engine
+              - name: POSTGRES_HOST
+                value: localhost
+              - name: POSTGRES_PORT
+                value: "5432"
+              - name: OVIRT_FQDN
+                value: engine-ovirt.10.34.63.173.xip.io  # Is there a way to get this from openshift?
+              - name: OVIRT_PASSWORD
+                value: engine
+              - name: OVIRT_PKI_ORGANIZATION
+                value: oVirt
+              - name: SPICE_PROXY
+                value: http://172.17.0.1:3128  # Is there a way to get this from openshift?
+              - name: ENGINE_SSO_SERVICE_URL
+                value: https://localhost:8443/ovirt-engine/sso"
+
+        volumes:
+          - name: engine-data
+            persistentVolumeClaim:
+              claimName: ovirt-engine-claim
+          - name: pgdata
+            persistentVolumeClaim:
+              claimName: ovirt-db-claim
+
+

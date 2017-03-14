@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: List
+items:
+
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    name: ovirt-db-volume
+    annotations:
+      pv.beta.kubernetes.io/gid: "999"
+  spec:
+    capacity:
+      storage: 10Gi
+    accessModes:
+    - ReadWriteOnce
+    nfs:
+      path: "/nfsshare/pgdata"
+      server: dhcp-0-174.tlv.redhat.com
+    persistentVolumeReclaimPolicy: Recycle
+
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    name: ovirt-engine-volume
+  spec:
+    capacity:
+      storage: 10Gi
+    accessModes:
+    - ReadWriteOnce
+    nfs:
+      path: "/nfsshare/backups"
+      server: dhcp-0-174.tlv.redhat.com
+    persistentVolumeReclaimPolicy: Recycle

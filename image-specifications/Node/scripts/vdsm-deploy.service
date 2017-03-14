@@ -1,0 +1,13 @@
+[Unit]
+Description=Simple service file to configure host after vdsm is running
+Wants=vdsmd.service
+After=vdsmd.service
+
+[Service]
+Type=oneshot
+EnvironmentFile=-/etc/sysconfig/vdsm
+ExecStart=/bin/sh /root/deploy.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
