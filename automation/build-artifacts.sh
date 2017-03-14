@@ -2,20 +2,42 @@
 [[ -d exported-artifacts ]] \
 || mkdir -p exported-artifacts
 
-CNAME="ovirt/engine-monolithic"
-ENGINE="image-specifications/Engine"
-SUFFIX="$(date -u +%Y%m%d%H%M%S).git$(git rev-parse --short HEAD)"
-TAGV=4.1
+IMG_PREFIX="ovirt/"
+IMAGES_PATH="./image-specifications"
+NODE_PATH="image-specifications/Engine"
+
+TAGV=`git describe`
 
 function clean_up {
-    docker rmi ${CNAME}:${TAGV}
     docker images -f dangling=true -q | xargs -r docker rmi
 }
 
 trap clean_up SIGHUP SIGINT SIGTERM
-cd ${ENGINE}
-docker build --no-cache --pull -t ${CNAME}:${TAGV} -f Dockerfile .
-docker save ${CNAME}:${TAGV} | gzip > ../exported-artifacts/${CNAME/\//-}-${TAGV}.tar.gz
-clean_up
+cd "${IMAGES_PATH}
 
-# we need to do it for all images
+ENGINE="Engine"
+cd ${ENGINE}
+
+docker build -t ${IMG_PREFIX}${ENGINE}:${TAGV} .
+
+NODE="Node"
+cd ../
+cd ${NODE}
+docker build -t ${IMG_PREFIX}${NODE}:${TAGV} .
+
+POSTGRES="Postgres"
+cd ../
+cd ${POSTGRES}
+docker build -t ${IMG_PREFIX}${POSTGRES}:${TAGV} .
+
+SYSLOG="Syslog"
+cd ../
+cd ${SYSLOG}
+docker build -t ${IMG_PREFIX}${SYSLOG}:${TAGV} .
+
+docker save ${IMG_PREFIX}${ENGINE}:${TAGV} | gzip > ../exported-artifacts/${CNAME/\//-}-${TAGV}.tar.gz
+docker save ${IMG_PREFIX}${NODE}:${TAGV} | gzip > ../exported-artifacts/${CNAME/\//-}-${TAGV}.tar.gz
+docker save ${IMG_PREFIX}${POSTGRES}:${TAGV} | gzip > ../exported-artifacts/${CNAME/\//-}-${TAGV}.tar.gz
+docker save ${IMG_PREFIX}${SYSLOG}:${TAGV} | gzip > ../exported-artifacts/${CNAME/\//-}-${TAGV}.tar.gz
+
+clean_up
