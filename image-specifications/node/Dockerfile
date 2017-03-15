@@ -66,9 +66,6 @@ RUN sed -i 's/multipathd.service //g' /usr/lib/systemd/system/vdsmd.service
 # we need to enable vdsm and supervdsm to start. not part of configure yet, but should
 RUN systemctl enable vdsmd.service supervdsmd.service sshd.service rsyslog.service
 
-# running configure - must be done before running init
-RUN vdsm-tool configure --force
-
 EXPOSE 54321
 
 CMD [ "/usr/sbin/init" ]
