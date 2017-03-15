@@ -12,19 +12,19 @@ spec:
       restartPolicy: "Always"
       hostIPC: true
       containers:
-        - image: docker.io/bronhaim/vdsm-kube-logger:latest
+        - image: docker.io/bronhaim/syslog:4.1
           name: vdsm-kube-logger
-          imagePullPolicy: "IfNotPresent"
+          imagePullPolicy: "Always"
           ports:
             - containerPort: 514
               protocol: TCP
 
-        - image: docker.io/bronhaim/vdsm-kube:latest
+        - image: docker.io/bronhaim/node:4.1
           name: vdsm-kube
           ports:
             - containerPort: 54321
               protocol: TCP
-          imagePullPolicy: "IfNotPresent"
+          imagePullPolicy: "Always"
           securityContext:
             privileged: true
           volumeMounts:

@@ -79,14 +79,14 @@ items:
         name: ovirt-engine
       spec:
         containers:
-          - image: rmohr/spice-squid
+          - image: docker.io/bronhaim/spice-squid:4.1
             name: spice-proxy
             imagePullPolicy: "Always"
             ports:
               - containerPort: 3128
                 protocol: TCP
 
-          - image: marsik/ovirt-postgres:9.2.18
+          - image: docker.io/bronhaim/ovirt-postgres:4.1
             name: postgres
             imagePullPolicy: "Always"
             ports:
@@ -103,7 +103,7 @@ items:
               - name: POSTGRES_DATABASE
                 value: engine
 
-          - image: docker.io/bronhaim/ovirt-engine:4.1
+          - image: docker.io/bronhaim/engine:4.1
             name: ovirt-engine
             imagePullPolicy: "Always"
             ports:
