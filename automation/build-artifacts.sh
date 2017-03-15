@@ -2,7 +2,7 @@
 [[ -d exported-artifacts ]] \
 || mkdir -p exported-artifacts
 
-IMG_PREFIX="docker.io/ovirt/"
+IMG_PREFIX="docker.io/bronhaim/"
 IMAGES_PATH="./image-specifications"
 
 # we can use here "git describe --all" if we want to keep image history
@@ -10,7 +10,7 @@ IMAGES_PATH="./image-specifications"
 TAGV="4.1"
 
 function clean_up {
-    docker images -f dangling=true -q | xargs -r docker rmi
+    docker images -f dangling=true -q | xargs -r docker rmi -f
 }
 
 trap clean_up SIGHUP SIGINT SIGTERM
