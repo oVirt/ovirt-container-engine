@@ -16,10 +16,14 @@ function clean_up {
 trap clean_up SIGHUP SIGINT SIGTERM
 cd ${IMAGES_PATH}
 
+# TODO: add jenkins docker login
+
 for img in "engine" "node" "ovirt-postgres" "syslog" "spice-squid"
 do
+  cd ${img}
   docker build -t ${IMG_PREFIX}${img}:${TAGV} .
   docker push ${IMG_PREFIX}${img}:${TAGV}
+  cd ..
 done
 
 clean_up
