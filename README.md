@@ -1,5 +1,9 @@
 # docker-ovirt-engine
 
+> IMPORTANT: This project has been dropped from oVirt
+>
+> Keeping the repo only for reference.
+
 [![Build Status](https://travis-ci.org/ovirt/ovirt-container-engine.svg?branch=master)](https://travis-ci.org/ovirt/ovirt-container-engine)
 
 Dockerized version of ovirt-engine, the management part of oVirt.
